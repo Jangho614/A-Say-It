@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_randWords"
+        android:title="오늘의 단어"
+        android:icon="@drawable/menuitem_rw" />
+    <item
+        android:id="@+id/menu_pronounce"
+        android:title="발음연습하기"
+        android:icon="@drawable/menuitem_pn"/>
+    <item
+        android:id="@+id/menu_myWords"
+        android:title="내 단어장"
+        android:icon="@drawable/menuitem_mw"/>
+</menu>
