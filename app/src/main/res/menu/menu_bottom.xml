@@ -3,7 +3,7 @@
     <item
         android:id="@+id/menu_randWords"
         android:title="오늘의 단어"
-        android:icon="@drawable/menuitem_rw" />
+        android:icon="@drawable/menuitem_rw"/>
     <item
         android:id="@+id/menu_pronounce"
         android:title="발음연습하기"

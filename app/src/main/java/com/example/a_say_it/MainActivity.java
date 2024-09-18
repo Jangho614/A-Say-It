@@ -1,10 +1,9 @@
 package com.example.a_say_it;
 
+import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     PronounceFragment Fragment1;
     WordsFragment Fragment2;
     MyWordsFragment Fragment3;
+
+    private MenuItem lastSelectedItem;  // 이전에 선택된 메뉴 아이템
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        // 아이콘 애니메이션 적용
+                        animateIcon(item);
+
+                        // 프래그먼트 전환
                         switch (item.getItemId()) {
                             case R.id.menu_pronounce:
                                 getSupportFragmentManager().beginTransaction()
@@ -57,5 +62,37 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    // 아이콘 애니메이션 메서드
+    private void animateIcon(MenuItem item) {
+        // 현재 클릭된 아이템의 뷰를 가져옴
+        View currentView = findViewById(item.getItemId());
+
+        // 이전에 선택된 아이템이 있으면 크기를 원래대로 되돌림
+        if (lastSelectedItem != null && lastSelectedItem != item) {
+            View lastView = findViewById(lastSelectedItem.getItemId());
+            if (lastView != null) {
+                ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(lastView, "scaleX", 1.0f);
+                ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(lastView, "scaleY", 1.0f);
+                scaleDownX.setDuration(200);  // 애니메이션 시간 설정
+                scaleDownY.setDuration(200);
+                scaleDownX.start();
+                scaleDownY.start();
+            }
+        }
+
+        // 현재 선택된 아이템의 크기를 키움
+        if (currentView != null) {
+            ObjectAnimator scaleUpX = ObjectAnimator.ofFloat(currentView, "scaleX", 1.25f);
+            ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(currentView, "scaleY", 1.25f);
+            scaleUpX.setDuration(200);  // 애니메이션 시간 설정
+            scaleUpY.setDuration(200);
+            scaleUpX.start();
+            scaleUpY.start();
+        }
+
+        // 마지막 선택된 아이템을 현재 아이템으로 갱신
+        lastSelectedItem = item;
     }
 }
