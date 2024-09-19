@@ -5,10 +5,64 @@
     android:layout_height="match_parent"
     tools:context=".PronounceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_margin="30dp"
+        android:text="발음 연습하기"
+        android:textSize="32sp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/WordsRecycle"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/setScript"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:singleLine="true"
+        android:background="@drawable/pn_word_text_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/SetWord_btn"
+            android:layout_width="0dp"
+            android:layout_height="63dp"
+            android:layout_weight=".50"
+            android:layout_gravity="center"
+            android:text="랜덤 단어\n가져오기" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/eval_btn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:background="@drawable/pn_mic_btn" />
+        <Button
+            android:id="@+id/RandWord_btn"
+            android:text="내 단어\n말하기"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".50"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+
+</LinearLayout>
 </FrameLayout>

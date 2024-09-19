@@ -1,6 +1,7 @@
 package com.example.a_say_it;
 
 import android.animation.ObjectAnimator;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         // 아이콘 애니메이션 적용
                         animateIcon(item);
+
+                        // 이전 아이템의 타이틀과 배경색 복원
+                        resetBottomNavTitles(bottomMenu);
+
+                        // 선택된 아이템의 배경색 변경
+                        changeSelectedItemBackground(item);
+
+                        // 현재 선택한 아이템의 타이틀 숨기기
+                        item.setTitle("");
 
                         // 프래그먼트 전환
                         switch (item.getItemId()) {
@@ -94,5 +104,42 @@ public class MainActivity extends AppCompatActivity {
 
         // 마지막 선택된 아이템을 현재 아이템으로 갱신
         lastSelectedItem = item;
+    }
+
+    // 모든 아이템의 타이틀을 복원하는 메서드
+    private void resetBottomNavTitles(BottomNavigationView bottomMenu) {
+        // 각 아이템의 타이틀을 원래 텍스트로 복구하고 배경색 초기화
+        for (int i = 0; i < bottomMenu.getMenu().size(); i++) {
+            MenuItem menuItem = bottomMenu.getMenu().getItem(i);
+            View itemView = findViewById(menuItem.getItemId());
+
+            // 타이틀 복원
+            switch (menuItem.getItemId()) {
+                case R.id.menu_pronounce:
+                    menuItem.setTitle("발음연습하기");
+                    break;
+                case R.id.menu_randWords:
+                    menuItem.setTitle("오늘의 단어");
+                    break;
+                case R.id.menu_myWords:
+                    menuItem.setTitle("내 단어장");
+                    break;
+            }
+
+            // 배경색 초기화
+            if (itemView != null) {
+                itemView.setBackgroundColor(Color.TRANSPARENT);  // 배경색 원래대로
+            }
+        }
+    }
+
+    // 선택된 아이템의 배경색을 변경하는 메서드
+    private void changeSelectedItemBackground(MenuItem selectedItem) {
+        View selectedView = findViewById(selectedItem.getItemId());
+
+        // 선택된 아이템의 배경색 변경
+        if (selectedView != null) {
+            selectedView.setBackgroundColor(Color.parseColor("#f7f5a3"));
+        }
     }
 }
