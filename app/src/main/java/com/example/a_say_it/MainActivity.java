@@ -25,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 기기 하단 네비게이션 바 가리기
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide the navigation bar
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide the status bar
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
         Fragment1 = new PronounceFragment();
         Fragment2 = new WordsFragment();
         Fragment3 = new MyWordsFragment();

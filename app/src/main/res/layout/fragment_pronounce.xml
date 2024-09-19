@@ -18,18 +18,28 @@
         android:text="발음 연습하기"
         android:textSize="32sp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/WordsRecycle"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="450dp"
+        android:layout_height="490dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"/>
+        android:layout_marginRight="30dp"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/play_btn"
+            android:text="다시듣기"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/setScript"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:singleLine="true"
+        android:elevation="3dp"
+        android:hint="단어를 입력 및 가져오기"
+        android:paddingStart="20dp"
         android:background="@drawable/pn_word_text_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -40,29 +50,35 @@
         android:layout_marginLeft="30dp"
         android:orientation="horizontal">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/SetWord_btn"
             android:layout_width="0dp"
-            android:layout_height="63dp"
+            android:layout_height="match_parent"
             android:layout_weight=".50"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_gravity="center"
+            android:background="@drawable/pn_randwords_btn"
             android:text="랜덤 단어\n가져오기" />
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/eval_btn"
             android:layout_width="100dp"
+            android:elevation="10dp"
             android:layout_height="100dp"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:layout_gravity="center"
             android:background="@drawable/pn_mic_btn" />
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/RandWord_btn"
             android:text="내 단어\n말하기"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight=".50"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/pn_mywords_btn"
             android:layout_gravity="center"/>
     </LinearLayout>
-
-
 </LinearLayout>
 </FrameLayout>
