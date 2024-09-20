@@ -23,13 +23,16 @@
         android:layout_height="490dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:orientation="vertical">
-        <Button
-            android:id="@+id/play_btn"
-            android:text="다시듣기"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/response_code"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/response_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatEditText
