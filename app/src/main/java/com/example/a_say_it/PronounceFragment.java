@@ -17,6 +17,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,6 +30,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.color.utilities.Score;
 import com.google.gson.Gson;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -38,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -45,14 +49,16 @@ import java.util.concurrent.Executors;
 public class PronounceFragment extends Fragment {
     private boolean isRecording = false;
     private boolean forceStop = false;
-    private byte[] speechData = new byte[16000 * 10 * 2]; // 10초 버퍼
+    private final byte[] speechData = new byte[16000 * 10 * 2]; // 10초 버퍼
     private int lenSpeech = 0;
-    private final int maxLenSpeech = 16000 * 10;
     private ExecutorService executor;
 
-    Button eval_btn;
+    Button eval_btn, tts_btn;
     EditText script_txt;
     TextView code, said_word, score;
+
+    private TextToSpeech tts;
+    private final String TTS_ID = "TTS";
 
     Gson gson = new Gson();
 
@@ -71,7 +77,16 @@ public class PronounceFragment extends Fragment {
         code = view.findViewById(R.id.response_code);
         said_word = view.findViewById(R.id.SaidWord);
         score = view.findViewById(R.id.WordScore);
+        tts_btn = view.findViewById(R.id.tts_btn);
         executor = Executors.newSingleThreadExecutor();
+
+        tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                tts.setLanguage(Locale.ENGLISH);
+            }
+        });
+        tts_btn.setVisibility(View.GONE);
 
         // 런타임 권한 요청
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO)
@@ -92,6 +107,12 @@ public class PronounceFragment extends Fragment {
                 }
             }
         });
+        tts_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tts.speak(said_word.getText(), TextToSpeech.QUEUE_FLUSH, null, TTS_ID);
+            }
+        });
         return view;
     }
     private void startRecording() {
@@ -100,8 +121,7 @@ public class PronounceFragment extends Fragment {
                 SendMessage("녹음중...", 1);
                 recordSpeech();
                 SendMessage("분석중...", 2);
-                String result = sendDataAndGetResult();
-                String json = result;
+                String json = sendDataAndGetResult();
                 JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
                 SetResult(jsonResponse.getReturn_object().getRecognized(), jsonResponse.getReturn_object().getScore());
             } catch (RuntimeException e) {
@@ -134,6 +154,7 @@ public class PronounceFragment extends Fragment {
             while (!forceStop) {
                 int ret = audio.read(inBuffer, 0, bufferSize);
                 for (int i = 0; i < ret; i++) {
+                    int maxLenSpeech = 16000 * 10;
                     if (lenSpeech >= maxLenSpeech) {
                         forceStop = true;
                         break;
@@ -220,8 +241,16 @@ public class PronounceFragment extends Fragment {
     }
     public void SetResult(String Word, String Score){
         getActivity().runOnUiThread(() -> code.setText("분석 완료!"));
-        getActivity().runOnUiThread(() -> said_word.setText(Word));
-        getActivity().runOnUiThread(() -> score.setText(Score));
+        if(!Word.equals("<?xml v") || !Score.equals("<?xml vers")){
+            getActivity().runOnUiThread(() -> said_word.setText(Word));
+            getActivity().runOnUiThread(() -> score.setText(Score));
+            tts_btn.setVisibility(View.VISIBLE);
+        }else{
+            getActivity().runOnUiThread(() -> code.setText("분석 실패.."));
+            getActivity().runOnUiThread(() -> said_word.setText("단어를 인식하지 못했습니다"));
+            getActivity().runOnUiThread(() -> score.setText("다시 시도해주세요"));
+            tts_btn.setVisibility(View.GONE);
+        }
         saveClientId(said_word.getText().toString());
         saveClientId(score.getText().toString());
     }
