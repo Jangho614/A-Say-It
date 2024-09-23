@@ -123,7 +123,9 @@ public class PronounceFragment extends Fragment {
                 SendMessage("분석중...", 2);
                 String json = sendDataAndGetResult();
                 JsonResponse jsonResponse = gson.fromJson(json, JsonResponse.class);
-                SetResult(jsonResponse.getReturn_object().getRecognized(), jsonResponse.getReturn_object().getScore());
+                getActivity().runOnUiThread(() -> {
+                    SetResult(jsonResponse.getReturn_object().getRecognized(), jsonResponse.getReturn_object().getScore());
+                });
             } catch (RuntimeException e) {
                 getActivity().runOnUiThread(() -> code.setText("Error: " + e.getMessage()));
                 Log.d("TAG","Error: " + e.getMessage());
@@ -240,15 +242,15 @@ public class PronounceFragment extends Fragment {
         getActivity().runOnUiThread(() -> code.setText(message));
     }
     public void SetResult(String Word, String Score){
-        getActivity().runOnUiThread(() -> code.setText("분석 완료!"));
         if(!Word.equals("<?xml v") || !Score.equals("<?xml vers")){
-            getActivity().runOnUiThread(() -> said_word.setText(Word));
-            getActivity().runOnUiThread(() -> score.setText(Score));
+            code.setText("분석 완료!");
+            said_word.setText(Word);
+            score.setText(Score);
             tts_btn.setVisibility(View.VISIBLE);
         }else{
-            getActivity().runOnUiThread(() -> code.setText("분석 실패.."));
-            getActivity().runOnUiThread(() -> said_word.setText("단어를 인식하지 못했습니다"));
-            getActivity().runOnUiThread(() -> score.setText("다시 시도해주세요"));
+            code.setText("분석 실패..");
+            said_word.setText("단어를 인식하지 못했습니다");
+            score.setText("다시 시도해주세요");
             tts_btn.setVisibility(View.GONE);
         }
         saveClientId(said_word.getText().toString());
