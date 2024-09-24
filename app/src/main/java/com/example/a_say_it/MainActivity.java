@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     // 각 fragment 클래스의 변수 선언
     PronounceFragment Fragment1;
     WordsFragment Fragment2;
-    MyWordsFragment Fragment3;
+    MyWordFragment Fragment3;
 
     private MenuItem lastSelectedItem;  // 이전에 선택된 메뉴 아이템
 
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment1 = new PronounceFragment();
         Fragment2 = new WordsFragment();
-        Fragment3 = new MyWordsFragment();
+        Fragment3 = new MyWordFragment();
 
         // 하단바 메뉴 변수 선언
         BottomNavigationView bottomMenu = findViewById(R.id.bottom_menu);

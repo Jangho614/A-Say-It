@@ -2,36 +2,32 @@ package com.example.a_say_it;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
-import android.Manifest;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.speech.tts.TextToSpeech;
 import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.color.utilities.Score;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.google.gson.Gson;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -68,6 +64,8 @@ public class PronounceFragment extends Fragment {
                 }
             });
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,6 +77,8 @@ public class PronounceFragment extends Fragment {
         score = view.findViewById(R.id.WordScore);
         tts_btn = view.findViewById(R.id.tts_btn);
         executor = Executors.newSingleThreadExecutor();
+
+
 
         tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -176,12 +176,10 @@ public class PronounceFragment extends Fragment {
         }
     }
     public String sendDataAndGetResult() {
-        String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition";
+        String openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Pronunciation";
         String accessKey = "8fa896a1-dc2a-48d6-a1b6-5ec44804f84f";
         String languageCode = "english";
         String script = script_txt.getText().toString();
-        openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Pronunciation";
-
 
         Map<String, Object> request = new HashMap<>();
         Map<String, String> argument = new HashMap<>();
@@ -247,6 +245,7 @@ public class PronounceFragment extends Fragment {
             said_word.setText(Word);
             score.setText(Score);
             tts_btn.setVisibility(View.VISIBLE);
+            AddRecyclerViewItem(Word, Score);
         }else{
             code.setText("분석 실패..");
             said_word.setText("단어를 인식하지 못했습니다");
@@ -255,6 +254,10 @@ public class PronounceFragment extends Fragment {
         }
         saveClientId(said_word.getText().toString());
         saveClientId(score.getText().toString());
+    }
+    public void AddRecyclerViewItem(String word, String score) {
+        MyWordAdapter adapter = new MyWordAdapter();
+        adapter.addItem(new MyWordAdapter.Item(word, score, ""));
     }
 }
 

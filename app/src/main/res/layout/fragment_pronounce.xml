@@ -46,7 +46,18 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"/>
         </LinearLayout>
-
+        <TextView
+            android:id="@+id/Word_detail1"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
+        <TextView
+            android:id="@+id/Word_detail2"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center" />
         <TextView
             android:id="@+id/WordScore"
             android:textSize="20sp"
