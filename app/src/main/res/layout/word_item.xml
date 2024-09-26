@@ -21,7 +21,7 @@
             <TextView
                 android:id="@+id/word"
                 android:hint="word"
-                android:textSize="32sp"
+                android:textSize="24sp"
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -34,6 +34,8 @@
                 android:layout_height="wrap_content"/>
             <!-- score 텍스트 뷰를 오른쪽 끝으로 이동 -->
             <TextView
+                android:visibility="gone"
+
                 android:id="@+id/score"
                 android:textAlignment="viewEnd"
                 android:layout_marginRight="20dp"
@@ -44,6 +46,8 @@
                 android:layout_weight="1"/>
         </LinearLayout>
         <TextView
+            android:visibility="gone"
+
             android:id="@+id/definition"
             android:hint="definition"
             android:layout_marginLeft="20dp"

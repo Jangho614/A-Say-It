@@ -10,20 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MyWordFragment extends Fragment {
-    RecyclerView wordRecycle;
-
+    public RecyclerView wordRecycle;
+    static MyWordAdapter adapter = new MyWordAdapter();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_words, container, false);
-
-        MyWordAdapter adapter = new MyWordAdapter();
         wordRecycle = view.findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         wordRecycle.setLayoutManager(layoutManager);
         wordRecycle.setAdapter(adapter);
+
 
         return view;
     }

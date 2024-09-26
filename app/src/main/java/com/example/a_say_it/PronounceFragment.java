@@ -3,6 +3,7 @@ package com.example.a_say_it;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.color.utilities.Score;
 import com.google.gson.Gson;
 
 import java.io.BufferedInputStream;
@@ -55,6 +58,7 @@ public class PronounceFragment extends Fragment {
     Button eval_btn, tts_btn, play_btn;
     EditText script_txt;
     TextView code, said_word, score;
+    ImageView score_star;
 
     private AudioTrack audioTrack;
     private TextToSpeech tts;
@@ -80,8 +84,10 @@ public class PronounceFragment extends Fragment {
         score = view.findViewById(R.id.WordScore);
         tts_btn = view.findViewById(R.id.tts_btn);
         play_btn = view.findViewById(R.id.play_record);
+        score_star = view.findViewById(R.id.score_star);
         executor = Executors.newSingleThreadExecutor();
 
+        score_star.setVisibility(View.INVISIBLE);
 
         tts = new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -100,6 +106,7 @@ public class PronounceFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
+                score_star.setVisibility(View.INVISIBLE);
                 if (isRecording) {
                     forceStop = true;
                     saveClientId(code.getText().toString());
@@ -227,6 +234,7 @@ public class PronounceFragment extends Fragment {
         if (!script.isEmpty()) {
             argument.put("script", script);
         }
+
         argument.put("language_code", languageCode);
         argument.put("audio", audioContents);
         request.put("access_key", accessKey);
@@ -280,13 +288,20 @@ public class PronounceFragment extends Fragment {
         getActivity().runOnUiThread(() -> code.setText(message));
     }
 
+    @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     public void SetResult(String Word, String Score) {
         if (!Word.equals("<?xml v") || !Score.equals("<?xml vers")) {
             code.setText("분석 완료!");
             said_word.setText(Word);
-            score.setText(Score);
+            score.setText("발음 점수 : " + Score.substring(0,3));
             tts_btn.setVisibility(View.VISIBLE);
-            AddRecyclerViewItem(Word, Score);
+
+            MyWordAdapter.Item newItem = new MyWordAdapter.Item(
+                    said_word.getText().toString(), score.getText().toString(), "");
+            MyWordFragment.adapter.addItem(newItem);
+            MyWordFragment.adapter.notifyDataSetChanged();
+
+            SetStar(Float.parseFloat(Score));
         } else {
             code.setText("분석 실패..");
             said_word.setText("단어를 인식하지 못했습니다");
@@ -296,8 +311,18 @@ public class PronounceFragment extends Fragment {
         saveClientId(said_word.getText().toString());
         saveClientId(score.getText().toString());
     }
-    public void AddRecyclerViewItem(String word, String score) {
-        MyWordAdapter adapter = new MyWordAdapter();
-        adapter.addItem(new MyWordAdapter.Item(word, score, ""));
+    public void SetStar(float score){
+        score_star.setVisibility(View.VISIBLE);
+        if (1 <= score &&  score < 2) {
+            score_star.setImageResource(R.drawable.score_1);
+        }else if (2 <= score && score <3) {
+            score_star.setImageResource(R.drawable.score_2);
+        }else if (3 <= score && score <4) {
+            score_star.setImageResource(R.drawable.score_3);
+        }else if (4 <= score && score <5) {
+            score_star.setImageResource(R.drawable.score_4);
+        }else{
+            score_star.setImageResource(R.drawable.score_5);
+        }
     }
 }
