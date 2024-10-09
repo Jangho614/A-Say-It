@@ -31,7 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.color.utilities.Score;
 import com.google.gson.Gson;
 
 import java.io.BufferedInputStream;
@@ -72,7 +71,6 @@ public class PronounceFragment extends Fragment {
                 }
             });
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,8 +104,10 @@ public class PronounceFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
+                score.setVisibility(View.INVISIBLE);
                 score_star.setVisibility(View.INVISIBLE);
                 if (isRecording) {
+                    eval_btn.setClickable(false);
                     forceStop = true;
                     saveClientId(code.getText().toString());
                     eval_btn.setBackgroundResource(R.drawable.pn_mic_btn);
@@ -181,6 +181,7 @@ public class PronounceFragment extends Fragment {
                     int maxLenSpeech = 16000 * 10;
                     if (lenSpeech >= maxLenSpeech) {
                         forceStop = true;
+                        eval_btn.setBackgroundResource(R.drawable.pn_mic_btn);
                         break;
                     }
                     speechData[lenSpeech * 2] = (byte) (inBuffer[i] & 0x00FF);
@@ -290,6 +291,7 @@ public class PronounceFragment extends Fragment {
 
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
     public void SetResult(String Word, String Score) {
+        score.setVisibility(View.VISIBLE);
         if (!Word.equals("<?xml v") || !Score.equals("<?xml vers")) {
             code.setText("분석 완료!");
             said_word.setText(Word);
@@ -302,6 +304,7 @@ public class PronounceFragment extends Fragment {
             MyWordFragment.adapter.notifyDataSetChanged();
 
             SetStar(Float.parseFloat(Score));
+            eval_btn.setClickable(true);
         } else {
             code.setText("분석 실패..");
             said_word.setText("단어를 인식하지 못했습니다");
@@ -324,5 +327,38 @@ public class PronounceFragment extends Fragment {
         }else{
             score_star.setImageResource(R.drawable.score_5);
         }
+    }
+
+    private void getPronunciation(String word) {
+
+        String apiKey = "0616c7eaa7msh18a00b696bee72cp14cb73jsn48123e63bb67";
+        String apiHost = "wordsapiv1.p.rapidapi.com";
+        new Thread(() -> {
+            try {
+                URL url = new URL("https://" + apiHost + "/words/" + word + "/pronunciation");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("x-rapidapi-key", apiKey);
+                connection.setRequestProperty("x-rapidapi-host", apiHost);
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // 응답 처리 (예: JSON 파싱)
+                    Log.d("API Response", response.toString());
+                } else {
+                    Log.e("API Error", "Response Code: " + responseCode);
+                }
+            } catch (Exception e) {
+                Log.e("API Error", "Exception: " + e.getMessage());
+            }
+        }).start();
     }
 }

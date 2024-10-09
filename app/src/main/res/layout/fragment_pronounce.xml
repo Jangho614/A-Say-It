@@ -64,7 +64,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/play_record"
             android:text="내 말하기 다시 듣기"
-            android:layout_marginHorizontal="50dp"
+            android:layout_marginHorizontal="100dp"
             android:layout_marginVertical="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

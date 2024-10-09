@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MyWordAdapter extends RecyclerView.Adapter<MyWordAdapter.ViewHolder>{
+public class RandAdapter extends RecyclerView.Adapter<RandAdapter.ViewHolder>{
 
     public ArrayList<Item> items = new ArrayList<Item>();
 
@@ -32,7 +32,7 @@ public class MyWordAdapter extends RecyclerView.Adapter<MyWordAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.word_item, viewGroup, false);
+                .inflate(R.layout.rand_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
@@ -62,8 +62,8 @@ public class MyWordAdapter extends RecyclerView.Adapter<MyWordAdapter.ViewHolder
 
         public Item(String word, String pronunciation, String definition) {
             this.word = word;
-            this.pronunciation = pronunciation;
-            this.definition = definition;
+            this.pronunciation = definition;
+            this.definition = pronunciation;
         }
     }
 }

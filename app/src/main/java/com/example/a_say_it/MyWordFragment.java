@@ -16,13 +16,12 @@ public class MyWordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_words, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_word, container, false);
         wordRecycle = view.findViewById(R.id.recyclerView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         wordRecycle.setLayoutManager(layoutManager);
         wordRecycle.setAdapter(adapter);
-
 
         return view;
     }

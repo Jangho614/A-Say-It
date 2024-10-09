@@ -46,7 +46,6 @@
                 android:layout_weight="1"/>
         </LinearLayout>
         <TextView
-            android:visibility="gone"
             android:id="@+id/definition"
             android:hint="definition"
             android:layout_marginLeft="20dp"
