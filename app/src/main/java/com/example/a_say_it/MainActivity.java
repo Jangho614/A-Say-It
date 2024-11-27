@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 마지막 선택된 아이템을 현재 아이템으로 갱신
         lastSelectedItem = item;
-    }
+    }   
 
     // 모든 아이템의 타이틀을 복원하는 메서드
     private void resetBottomNavTitles(BottomNavigationView bottomMenu) {
