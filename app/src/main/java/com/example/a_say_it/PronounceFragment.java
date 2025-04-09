@@ -331,7 +331,7 @@ public class PronounceFragment extends Fragment {
 
     private void getPronunciation(String word) {
 
-        String apiKey = "0616c7eaa7msh18a00b696bee72cp14cb73jsn48123e63bb67";
+        String apiKey = "API-KEY";
         String apiHost = "wordsapiv1.p.rapidapi.com";
         new Thread(() -> {
             try {
